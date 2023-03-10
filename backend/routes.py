@@ -57,7 +57,7 @@ def get_health():
 
 @app.route("/count")
 def get_count():
-    return {"count": len(songs_list)}
+    return {"count": db.songs.count_documents({})}
 
 @app.route("/song")
 def songs():
@@ -88,7 +88,7 @@ def create_song():
 def update_song(id):
     new_data = request.json
     query = db.songs.find_one({"id": id})
-    changes = {"$set":{"lyrics": new_data["lyrics"], "title":new_data["title"]}}
+    changes = {"$set":new_data}
 
     if query:
         result = db.songs.update_one({"id": id}, changes)
